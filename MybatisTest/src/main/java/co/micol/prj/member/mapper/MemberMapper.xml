@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.micol.prj.member.mapper.MemberMapper">
+	<select id="memberSelectList" resultType="co.micol.prj.member.vo.MemberVO">
+		SELECT * FROM MEMBERS
+		<if test="author == 'all'">WHERE 1 = 1</if>
+		<if test="author != 'all'">WHERE RESPOSIBILITY = #{author}</if>
+	</select>
+	
+	<select id="memberSelect" resultType="co.micol.prj.member.vo.MemberVO">
+		SELECT * FROM MEMBERS
+		WHERE ID = #{id}
+	</select>
+	
+	<insert id="memberInsert">
+		INSERT INTO MEMBERS
+		VALUES(#{id},#{passwd},#{name},#{email},'user',#{pfileName},#{ofileName})
+	</insert>
+	
+	<delete id="memberDelete">
+	
+	</delete>
+	
+	<update id="memberUpdate">
+	
+	</update>
+	
+	<select id="memberLogin" resultType="co.micol.prj.member.vo.MemberVO">
+		SELECT * FROM MEMBERS
+		WHERE ID = #{id} AND PASSWD = #{password}
+	</select>
+	
+	<select id="isMemberIdCheck" resultType="boolean">
+		SELECT CASE WHEN COUNT(ID) = 1 THEN 0 ELSE 1 END AS ID
+		FROM MEMBERS WHERE ID = #{id}
+	</select>
+</mapper>

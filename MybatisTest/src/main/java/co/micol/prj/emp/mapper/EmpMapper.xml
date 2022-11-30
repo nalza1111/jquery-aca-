@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.micol.prj.emp.mapper.EmpMapper">
+
+	<select id="EmpList" resultType="co.micol.prj.emp.vo.EmpVO">
+		SELECT E.EMPLOYEE_ID,
+			   E.FIRST_NAME,
+			   E.LAST_NAME,
+			   E.EMAIL,
+			   E.PHONE_NUMBER,
+			   E.HIRE_DATE,
+			   E.JOB_ID,
+			   J.JOB_TITLE,
+			   E.HIRE_DATE
+    	FROM EMP_TEMP E LEFT OUTER JOIN JOB_TEMP J 
+    		ON E.JOB_ID = J.JOB_ID
+	</select>
+	
+	<select id="EmpSelect"  resultType="co.micol.prj.emp.vo.EmpVO">
+		SELECT E.EMPLOYEE_ID, 
+			   E.FIRST_NAME, 
+			   E.LAST_NAME, 
+			   E.EMAIL, 
+			   E.PHONE_NUMBER, 
+			   E.HIRE_DATE, 
+			   E.JOB_ID,
+			   J.JOB_TITLE, 
+			   E.HIRE_DATE
+   		 FROM EMP_TEMP E JOIN JOB_TEMP J 
+   		 	ON E.JOB_ID = J.JOB_ID 
+   		 	AND EMPLOYEE_ID = #{employeeId}
+	</select>
+	
+	<insert id="EmpInsert">
+		INSERT INTO EMP_TEMP VALUES(
+									book_seq.nextval,
+									#{firstName},
+									#{lastName},
+									#{email},
+									#{phoneNumber},
+									#{hireDate},
+									#{jobId}
+									)
+	</insert>
+	
+	<delete id="EmpDelete">
+		DELETE FROM EMP_TEMP WHERE EMPLOYEE_ID = #{employeeId}
+	</delete>
+	
+	<update id="EmpUdate">
+		UPDATE EMP_TEMP SET
+							first_name = #{firstName}, 
+							last_name = #{lastName}, 
+							email = #{email}, 
+							phone_number = #{phoneNumber},
+							hire_date = #{hireDate},
+							job_id = #{jobId}
+		 WHERE EMPLOYEE_ID = #{employeeId}
+	</update>
+	
+	<select id="jobList" resultType="hashmap">
+		SELECT JOB_ID, JOB_TITLE FROM JOB_TEMP
+	</select>
+	
+	<select id="currval" resultType="int">
+		SELECT BOOK_SEQ.CURRVAL FROM DUAL
+	</select>
+</mapper>

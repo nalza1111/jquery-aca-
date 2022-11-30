@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.micol.prj.board.mapper.BoardMapper">
+	<select id="boardSelectList" resultType="co.micol.prj.board.vo.BoardVO">
+		SELECT * FROM TB1_BOARD ORDER BY BOARD_NO DESC
+	</select>
+	
+	<insert id="boardInsert">
+		INSERT INTO TB1_BOARD VALUES(BOARD_SEQ.NEXTVAL, #{title}, #{content}, #{writer}, 0, #{image}, SYSDATE)
+	</insert>
+	
+	<select id="boardSelectOne" resultType="co.micol.prj.board.vo.BoardVO">
+		SELECT * FROM TB1_BOARD WHERE BOARD_NO = #{boardNo}
+	</select>
+	
+	<update id="boardCntPlus">
+		UPDATE TB1_BOARD SET CLICK_CNT = CLICK_CNT+1 WHERE BOARD_NO=#{boardNo}
+	</update>
+	
+	<insert id="replyInsert">
+		INSERT INTO TBL_REPLY VALUES(REQ_SEQ.NEXTVAL, #{boardNo}, #{replyContent}, #{replyWriter}, SYSDATE)
+	</insert>
+	
+	<select id="replySelectList" resultType="co.micol.prj.board.vo.ReplyVO">
+		SELECT * FROM TBL_REPLY WHERE BOARD_NO = #{boardNo}
+	</select>
+	
+	<update id="replyDelete">
+		UPDATE TBL_REPLY SET REPLY_CONTENT = '원글자가 삭제함', REPLY_WRITER = '삭제' WHERE REPLY_NO = #{replyNo}
+	</update>
+	
+	<delete id="boardDelete">
+		DELETE FROM TB1_BOARD WHERE BOARD_NO = #{boardNo}
+	</delete>
+	
+	<select id="boardSelectPgList" resultType="co.micol.prj.board.vo.BoardVO">
+		select b.board_no, b.title, b.content, b.writer, b.click_cnt, b.image, b.write_date
+        from ( select rownum rn, a.*
+        from(select *
+             from tb1_board
+             order by board_no desc) a
+              <![CDATA[ where rownum <= #{pg2}) b  ]]>
+        where b.rn >= #{pg1}
+	</select>
+</mapper>
